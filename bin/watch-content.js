@@ -24,7 +24,7 @@ const compileHbs = (filepath) => {
 const compileAllFiles = () => {
   fse.readdirSync(src).forEach(file => {
     const path = src + '/' + file;
-    if (fse.statSync(path).isFile()) {
+    if (fse.statSync(path).isFile() && path.indexOf('.DS_Store') < 0) {
       compileHbs(path);
     }
   });
