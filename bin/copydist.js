@@ -16,6 +16,7 @@ concat([
 concat('public/resources/css', 'dist/resources/css/styles.min.css');
 
 copyFile('app/apple-touch-icon.png', 'dist/apple-touch-icon.png');
+copyFile('app/favicon.ico', 'dist/favicon.ico');
 
 copyFolder('public/assets', 'dist/assets');
 copyFolder('public/resources/img', 'dist/resources/img');
