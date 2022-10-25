@@ -17,6 +17,11 @@ concat('public/resources/css', 'dist/resources/css/styles.min.css');
 
 copyFile('app/apple-touch-icon.png', 'dist/apple-touch-icon.png');
 copyFile('app/favicon.ico', 'dist/favicon.ico');
+copyFile('app/favicon-16x16.png', 'dist/favicon-16x16.png');
+copyFile('app/favicon-32x32.png', 'dist/favicon-32x32.png');
+copyFile('app/android-chrome-192x192.png', 'dist/android-chrome-192x192.png');
+copyFile('app/android-chrome-512x512.png', 'dist/android-chrome-512x512.png');
+copyFile('app/site.webmanifest', 'dist/site.webmanifest');
 
 copyFolder('public/assets', 'dist/assets');
 copyFolder('public/resources/img', 'dist/resources/img');
