@@ -7,7 +7,15 @@ function fread(f) {
 }
 
 function writeToFile(result, file) {
-	fs.writeFile('dist/' + file, result[0], function(err) {
+	const extension = path.extname(file);
+  const filename = path.basename(file, extension);
+	const folder = path.dirname(file);
+	const targetFolder = folder.replace('public', 'dist');
+  if (!fs.existsSync(targetFolder)){
+    fs.mkdirSync(targetFolder);
+  }
+
+	fs.writeFile(targetFolder + '/' + filename + '.html', result[0], function(err) {
 		if(err) {
 			return console.log(err);
 		}
@@ -15,13 +23,20 @@ function writeToFile(result, file) {
 	});
 }
 
-var files = fs.readdirSync('./public');
-var targetFiles = files.filter(function(file) {
-	return path.extname(file).toLowerCase() === '.html';
-});
+// https://stackoverflow.com/questions/50121881/node-js-recursively-list-full-path-of-files
+const traverseDir = function(dir) {
+  fs.readdirSync(dir).forEach(file => {
+    let fullPath = path.join(dir, file);
+    if (fs.lstatSync(fullPath).isDirectory()) {
+       traverseDir(fullPath);
+     } else {
+       if (path.extname(fullPath).toLowerCase() === '.html') {
+					const html = fread(fullPath);
+					const result = useref(html);
+					writeToFile(result, fullPath);
+       }
+     }  
+  });
+};
 
-targetFiles.forEach(function(file) {
-	var html = fread('public/' + file);
-	var result = useref(html);
-	writeToFile(result, file);
-});
+traverseDir('./public');
