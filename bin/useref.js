@@ -1,6 +1,7 @@
-var fs = require('fs');
-var path = require('path');
-var useref = require('useref');
+const fs = require('fs');
+const path = require('path');
+const useref = require('useref');
+const utils = require('./utils.js');
 
 function fread(f) {
   return fs.readFileSync(f, { encoding: 'utf-8'});
@@ -23,20 +24,12 @@ function writeToFile(result, file) {
 	});
 }
 
-// https://stackoverflow.com/questions/50121881/node-js-recursively-list-full-path-of-files
-const traverseDir = function(dir) {
-  fs.readdirSync(dir).forEach(file => {
-    let fullPath = path.join(dir, file);
-    if (fs.lstatSync(fullPath).isDirectory()) {
-       traverseDir(fullPath);
-     } else {
-       if (path.extname(fullPath).toLowerCase() === '.html') {
-					const html = fread(fullPath);
-					const result = useref(html);
-					writeToFile(result, fullPath);
-       }
-     }  
-  });
+const userefIt = function(fullPath) {
+  if (path.extname(fullPath).toLowerCase() === '.html') {
+    const html = fread(fullPath);
+    const result = useref(html);
+    writeToFile(result, fullPath);
+  }
 };
 
-traverseDir('./public');
+utils.traverseDir('./public', userefIt);
