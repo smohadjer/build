@@ -1,11 +1,9 @@
-const compilesFile = require('./compile.js');
+const compileFile = require('./compile.js');
 const fse = require("fs-extra");
 const chokidar = require('chokidar');
 const partials = require('./partials.js');
 const src = 'app/content';
-const dest = 'public';
-const path = require('path');
-
+const utils = require('./utils.js');
 
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
@@ -14,21 +12,6 @@ const watcher = chokidar.watch('.', {
   ignoreInitial: true,
 	cwd: src
 });
-
-const compileHbs = (filepath) => {
-  const extension = path.extname(filepath);
-  const file = 'app/' + path.basename(filepath, extension) + '.hbs';
-  compilesFile(file);
-}
-
-const compileAllFiles = () => {
-  fse.readdirSync(src).forEach(file => {
-    const path = src + '/' + file;
-    if (fse.statSync(path).isFile() && path.indexOf('.DS_Store') < 0) {
-      compileHbs(path);
-    }
-  });
-}
 
 // Something to use when events are received.
 const log = console.log.bind(console);
@@ -50,19 +33,16 @@ watcher
       console.log('Copying asset to public folder...');
       copyFile(filepath);
     } else {
-      if (filepath.indexOf('shared') >= 0) {
-        console.log('Compiling all pages...');
+      console.log('Compiling all pages...');
+      if (filepath.indexOf('partials') >= 0) {
         partials.registerPartials();
-        compileAllFiles();
-      } else {
-        console.log('Compiling ', filepath);
-        compileHbs(filepath);
       }
+      utils.traverseDir('./app/pages', compileFile);
     }
   })
   .on('unlink', filepath => {
 	  log(`File ${filepath} has been removed`);
-	  //fse.unlink(dest + filepath);
+	  //fse.unlink('public' + filepath);
   });
 
 /* copies assets from content folder to public folder */
@@ -78,23 +58,4 @@ function copyFile(filepath) {
     }
     console.log(source, ' copy completed!')
   });
-
-	/*
-  fse.pathExists(source, (err, exists) => {
-		console.log(err);
-    console.log(exists);
-    console.log(filepath);
-
-		if (exists) {
-      console.log(source, destination);
-			fse.copy(source, destination, function (err) {
-				if (err){
-					console.log('An error occured while copying the folder.')
-					return console.error(err)
-				}
-				console.log(source, ' copy completed!')
-			});
-		}
-	});
-  */
 }

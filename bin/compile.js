@@ -41,3 +41,5 @@ const compileFile = function(pathToFile) {
 
 partials.registerPartials();
 utils.traverseDir('./app/pages', compileFile);
+
+module.exports = compileFile;
