@@ -7,7 +7,8 @@ module.exports = {
   registerPartials: () => {
     const callback = (fullPath) => {
       const extension = path.extname(fullPath);
-      const partialName = path.basename(fullPath, extension);
+      const partialPath = fullPath.replace('app/content/', '');
+      const partialName = partialPath.replace(extension, '');
       handlebars.registerPartial(partialName, fs.readFileSync(fullPath, 'utf8'));
     };
 
