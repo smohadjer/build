@@ -3,30 +3,22 @@ const path = require('path');
 const handlebars = require('handlebars');
 const partials = require('./partials.js');
 const utils = require('./utils.js');
-const registerContent = function(folder, filename) {
-  const folderNew = folder.replace('app/pages', 'app/content/pages');
-  const path = folderNew + '/' + filename + '.html';
-  handlebars.registerPartial(
-    'content',
-    fs.readFileSync(path, 'utf8')
-  )
-};
 const compileFile = function(pathToFile) {
-  if (path.extname(pathToFile).toLowerCase() !== '.hbs') {
-    return;
-  }
   const extension = path.extname(pathToFile);
   const filename = path.basename(pathToFile, extension);
   const folder = path.dirname(pathToFile);
-  const template = fs.readFileSync(pathToFile, 'utf8');
-  registerContent(folder, filename);
-  const compiled = handlebars.compile(template);
-  const html = compiled({});
+  const source = fs.readFileSync('app/layout.hbs', 'utf8');
+  handlebars.registerPartial(
+    'content',
+    fs.readFileSync(pathToFile, 'utf8')
+  )
+  const template = handlebars.compile(source);
+  const html = template({pageId: filename});
   const dir = 'public';
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
   }
-  const relativeFolder = folder.replace('app/pages', 'public');
+  const relativeFolder = folder.replace('app/content/pages', 'public');
   if (!fs.existsSync(relativeFolder)){
     fs.mkdirSync(relativeFolder);
   }
@@ -39,7 +31,7 @@ const compileFile = function(pathToFile) {
   });
 };
 
+utils.registerHandlebarsHelpers();
 partials.registerPartials();
-utils.traverseDir('./app/pages', compileFile);
-
+utils.traverseDir('./app/content/pages', compileFile);
 module.exports = compileFile;

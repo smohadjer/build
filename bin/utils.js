@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const handlebars = require('handlebars');
 
 module.exports = {
   // https://stackoverflow.com/questions/50121881/node-js-recursively-list-full-path-of-files
@@ -16,5 +17,15 @@ module.exports = {
     };
 
     myRecursiveFunction(dir, callback);
+  },
+  registerHandlebarsHelpers: () => {
+    handlebars.registerHelper('ifeq', function (a, b, options) {
+      if (a == b) { return options.fn(this); }
+      return options.inverse(this);
+    });
+    handlebars.registerHelper('ifnoteq', function (a, b, options) {
+      if (a != b) { return options.fn(this); }
+      return options.inverse(this);
+    });
   }
 }
