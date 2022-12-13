@@ -37,7 +37,7 @@ watcher
       if (filepath.indexOf('partials') >= 0) {
         partials.registerPartials();
       }
-      utils.traverseDir('./app/pages', compileFile);
+      utils.traverseDir('./app/content/pages', compileFile);
     }
   })
   .on('unlink', filepath => {
