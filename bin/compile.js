@@ -5,6 +5,7 @@ const partials = require('./partials.js');
 const utils = require('./utils.js');
 const compileFile = function(pathToFile) {
   const extension = path.extname(pathToFile);
+  if (extension !== '.html') return;
   const filename = path.basename(pathToFile, extension);
   const folder = path.dirname(pathToFile);
   const source = fs.readFileSync('app/layout.hbs', 'utf8');
