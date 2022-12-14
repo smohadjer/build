@@ -13,7 +13,9 @@ const compileFile = function(pathToFile) {
     fs.readFileSync(pathToFile, 'utf8')
   )
   const template = handlebars.compile(source);
-  const html = template({pageId: filename});
+  /* using substring(1) to remove slash from id */
+  const page_id = (folder.replace('app/content/pages', '') + '/' + filename).substring(1);
+  const html = template({pageId: page_id});
   const dir = 'public';
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
