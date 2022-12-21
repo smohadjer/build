@@ -1,19 +1,14 @@
-var fs = require("fs-extra");
-var concat = require("concat");
+const fs = require('fs');
+var fse = require("fs-extra");
+const path = require('path');
 
-fs.mkdirSync('dist/resources/css', { recursive: true }, (err) => {
+fse.mkdirSync('dist/resources/css', { recursive: true }, (err) => {
 	if (err) throw err;
 });
 
-fs.mkdirSync('dist/resources/js', { recursive: true }, (err) => {
+fse.mkdirSync('dist/resources/js', { recursive: true }, (err) => {
 	if (err) throw err;
 });
-
-concat([
-  'public/resources/js/handlebars.runtime.js',
-  'public/resources/js/handlebars.templates.js'], 
-  'dist/resources/js/bundle.js');
-concat('public/resources/css', 'dist/resources/css/styles.min.css');
 
 copyFile('app/apple-touch-icon.png', 'dist/apple-touch-icon.png');
 copyFile('app/favicon.ico', 'dist/favicon.ico');
@@ -25,16 +20,24 @@ copyFile('app/site.webmanifest', 'dist/site.webmanifest');
 
 copyFolder('public/assets', 'dist/assets');
 copyFolder('public/resources/img', 'dist/resources/img');
+copyFolder('public/resources/css', 'dist/resources/css');
 copyFolder('public/resources/fonts', 'dist/resources/fonts');
 
+fs.readdirSync('public').forEach(file => {
+	const extension = path.extname(file);
+	if (extension === '.html') {
+		copyFile('public/' + file, 'dist/' + file);
+	}
+});
+
 function copyFile(source, destination) {
-	fs.pathExists(source, (err, exists) => {
+	fse.pathExists(source, (err, exists) => {
     if (err) {
       console.log(err, source) // => null
     }
 
 		if (exists) {
-			fs.copy(source, destination, function (err) {
+			fse.copy(source, destination, function (err) {
 				if (err){
 					console.log('An error occured while copying the folder.')
 					return console.error(err)
@@ -46,8 +49,8 @@ function copyFile(source, destination) {
 }
 
 function copyFolder(source, destination) {
-	if (fs.existsSync(source)) {
-		fs.copy(source, destination, function (err) {
+	if (fse.existsSync(source)) {
+		fse.copy(source, destination, function (err) {
 			if (err){
 				console.log('An error occured while copying the folder.')
 				return console.error(err)
