@@ -7,15 +7,15 @@ function copyDependencies(type) {
   if (jsonContent.dependencies[type]) {
     jsonContent.dependencies[type].forEach(function(source) {
       var filename = path.basename(source);
-      var destination = `public/resources/${type}/${filename}`;
-  
+      var destination = (type === 'js') ? `public/resources/js/lib/${filename}` : `public/resources/css/${filename}`;
+
       fse.copy(source, destination, function (err) {
           if (err){
               console.log('An error occured while copying the folder.')
               return console.error(err)
           }
       });
-    }); 
+    });
   }
 }
 

@@ -21,6 +21,7 @@ copyFile('app/site.webmanifest', 'dist/site.webmanifest');
 copyFolder('public/assets', 'dist/assets');
 copyFolder('public/resources/img', 'dist/resources/img');
 copyFolder('public/resources/css', 'dist/resources/css');
+copyFolder('public/resources/js/lib', 'dist/resources/js/lib');
 copyFolder('public/resources/fonts', 'dist/resources/fonts');
 
 fs.readdirSync('public').forEach(file => {
