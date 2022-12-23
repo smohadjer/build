@@ -1,6 +1,6 @@
-const fs = require('fs');
 var fse = require("fs-extra");
 const path = require('path');
+const utils = require('./utils.js');
 
 fse.mkdirSync('dist/resources/css', { recursive: true }, (err) => {
 	if (err) throw err;
@@ -24,10 +24,12 @@ copyFolder('public/resources/css', 'dist/resources/css');
 copyFolder('public/resources/js/lib', 'dist/resources/js/lib');
 copyFolder('public/resources/fonts', 'dist/resources/fonts');
 
-fs.readdirSync('public').forEach(file => {
-	const extension = path.extname(file);
+/* copy pages to dist folder */
+utils.traverseDir('public', (pathToFile) => {
+	const extension = path.extname(pathToFile);
 	if (extension === '.html') {
-		copyFile('public/' + file, 'dist/' + file);
+		const targetPath = pathToFile.replace('public/', 'dist/');
+		copyFile(pathToFile, targetPath);
 	}
 });
 

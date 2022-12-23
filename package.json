@@ -1,6 +1,6 @@
 {
   "name": "build",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "A frontend build for HTML Websites",
   "repository": {
     "type": "git",
