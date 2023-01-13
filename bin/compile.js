@@ -24,7 +24,7 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const pageFolder = targetFolder + subFolder;
 
   if (!fs.existsSync(pageFolder)){
-    fs.mkdirSync(pageFolder);
+    fs.mkdirSync(pageFolder, { recursive: true });
   }
 
   const target = pageFolder + '/' + filename + '.html';
