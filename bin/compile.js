@@ -1,31 +1,35 @@
 const fs = require('fs');
 const path = require('path');
+const config = require('./config.js');
 const handlebars = require('handlebars');
 const partials = require('./partials.js');
 const utils = require('./utils.js');
-const compileFile = function(pathToFile) {
-  const extension = path.extname(pathToFile);
+
+const compileFile = function(pathToPage, sourceFolder, targetFolder) {
+  const pathToLayout = sourceFolder + '/layout.hbs';
+  const extension = path.extname(pathToPage);
   if (extension !== '.html') return;
-  const filename = path.basename(pathToFile, extension);
-  const folder = path.dirname(pathToFile);
-  const source = fs.readFileSync('app/layout.hbs', 'utf8');
+  const filename = path.basename(pathToPage, extension);
+  const folder = path.dirname(pathToPage);
+  const source = fs.readFileSync(pathToLayout, 'utf8');
   handlebars.registerPartial(
     'content',
-    fs.readFileSync(pathToFile, 'utf8')
+    fs.readFileSync(pathToPage, 'utf8')
   )
   const template = handlebars.compile(source);
   /* using substring(1) to remove slash from id */
-  const page_id = (folder.replace('app/content/pages', '') + '/' + filename).substring(1);
+  const page_id = (folder.replace(sourceFolder+'/pages', '') + '/' + filename).substring(1);
   const html = template({pageId: page_id});
+
   const dir = 'public';
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
   }
-  const relativeFolder = folder.replace('app/content/pages', 'public');
-  if (!fs.existsSync(relativeFolder)){
-    fs.mkdirSync(relativeFolder);
+
+  if (!fs.existsSync(targetFolder)){
+    fs.mkdirSync(targetFolder);
   }
-  const target = relativeFolder + '/' + filename + '.html';
+  const target = targetFolder + '/' + filename + '.html';
   fs.writeFile(target, html, function(err) {
     if(err) {
       return console.log(err);
@@ -35,6 +39,12 @@ const compileFile = function(pathToFile) {
 };
 
 utils.registerHandlebarsHelpers();
-partials.registerPartials();
-utils.traverseDir('./app/content/pages', compileFile);
+
+config.pages.forEach(page => {
+  partials.registerPartials(page.source + '/partials');
+  utils.traverseDir(page.source + '/pages', function(path) {
+    compileFile(path, page.source, page.target);
+  });
+});
+
 module.exports = compileFile;

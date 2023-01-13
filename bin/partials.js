@@ -4,7 +4,7 @@ const handlebars = require('handlebars');
 const utils = require('./utils.js');
 
 module.exports = {
-  registerPartials: () => {
+  registerPartials: (pathToPartial) => {
     const callback = (fullPath) => {
       const extension = path.extname(fullPath);
       const partialPath = fullPath.replace('app/content/', '');
@@ -12,6 +12,6 @@ module.exports = {
       handlebars.registerPartial(partialName, fs.readFileSync(fullPath, 'utf8'));
     };
 
-    utils.traverseDir('app/content/partials', callback);
+    utils.traverseDir(pathToPartial, callback);
   }
 }

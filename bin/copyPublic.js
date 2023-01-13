@@ -1,11 +1,10 @@
-var fse = require("fs-extra");
-var path = require('path');
-var content = fse.readFileSync("projectConfig.json");
-var jsonContent = JSON.parse(content);
+const config = require('./config.js');
+const fse = require("fs-extra");
+const path = require('path');
 
 function copyDependencies(type) {
-  if (jsonContent.dependencies[type]) {
-    jsonContent.dependencies[type].forEach(function(source) {
+  if (config.dependencies[type]) {
+    config.dependencies[type].forEach(function(source) {
       var filename = path.basename(source);
       var destination = (type === 'js') ? `public/resources/js/lib/${filename}` : `public/resources/css/${filename}`;
 
@@ -34,7 +33,7 @@ function copyResources(folder) {
 }
 
 function copyAssets() {
-	const srcDir = './app/content/assets';
+	const srcDir = './app/assets';
 	const destDir = './public/assets/';
 
 	//https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js

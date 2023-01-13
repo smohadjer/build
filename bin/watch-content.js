@@ -4,6 +4,8 @@ const chokidar = require('chokidar');
 const partials = require('./partials.js');
 const src = 'app/content';
 const utils = require('./utils.js');
+const path = require('path');
+const config = require('./config.js');
 
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
@@ -29,15 +31,26 @@ watcher
   })
   .on('change', filepath => {
 	  log(`File ${filepath} has been changed`);
+    const folder = path.dirname(filepath);
     if (filepath.indexOf('assets') >= 0) {
       console.log('Copying asset to public folder...');
       copyFile(filepath);
     } else {
-      console.log('Compiling all pages...');
-      if (filepath.indexOf('partials') >= 0) {
-        partials.registerPartials();
+      let sourceFolder = 'app/content/';
+      if (folder.indexOf('partials') >= 0) {
+        sourceFolder += folder.replace('/partials', '');
+      } else {
+        sourceFolder += folder.replace('/pages', '');
       }
-      utils.traverseDir('./app/content/pages', compileFile);
+      console.log('Compiling all pages...');
+      config.pages.forEach(page => {
+        if (page.source === sourceFolder) {
+          partials.registerPartials(page.source + '/partials');
+          utils.traverseDir(page.source + '/pages', function(path) {
+            compileFile(path, page.source + '/layout.hbs', page.target);
+          });
+        }
+      });
     }
   })
   .on('unlink', filepath => {
