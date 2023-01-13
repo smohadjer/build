@@ -18,18 +18,16 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   )
   const template = handlebars.compile(source);
   /* using substring(1) to remove slash from id */
-  const page_id = (folder.replace(sourceFolder+'/pages', '') + '/' + filename).substring(1);
+  const subFolder = folder.replace(sourceFolder + '/pages', '');
+  const page_id = (subFolder + '/' + filename).substring(1);
   const html = template({pageId: page_id});
+  const pageFolder = targetFolder + subFolder;
 
-  const dir = 'public';
-  if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir);
+  if (!fs.existsSync(pageFolder)){
+    fs.mkdirSync(pageFolder);
   }
 
-  if (!fs.existsSync(targetFolder)){
-    fs.mkdirSync(targetFolder);
-  }
-  const target = targetFolder + '/' + filename + '.html';
+  const target = pageFolder + '/' + filename + '.html';
   fs.writeFile(target, html, function(err) {
     if(err) {
       return console.log(err);
