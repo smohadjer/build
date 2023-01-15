@@ -47,7 +47,7 @@ watcher
         if (page.source === sourceFolder) {
           partials.registerPartials(page.source + '/partials');
           utils.traverseDir(page.source + '/pages', function(path) {
-            compileFile(path, page.source + '/layout.hbs', page.target);
+            compileFile(path, page.source, page.target);
           });
         }
       });
