@@ -2,7 +2,6 @@ const compileFile = require('./compile.js');
 const fse = require("fs-extra");
 const chokidar = require('chokidar');
 const partials = require('./partials.js');
-const src = 'app/content';
 const utils = require('./utils.js');
 const path = require('path');
 const config = require('./config.js');
@@ -12,7 +11,7 @@ const watcher = chokidar.watch('.', {
 	ignored: /(^|[\/\\])\../, // ignore dotfiles
 	persistent: true,
   ignoreInitial: true,
-	cwd: src
+	cwd: 'app/content'
 });
 
 // Something to use when events are received.
@@ -32,19 +31,20 @@ watcher
   .on('change', filepath => {
 	  log(`File ${filepath} has been changed`);
     const folder = path.dirname(filepath);
+    console.log('folder: ', folder);
     if (filepath.indexOf('assets') >= 0) {
       console.log('Copying asset to public folder...');
       copyFile(filepath);
     } else {
-      let sourceFolder = 'app/content/';
-      if (folder.indexOf('partials') >= 0) {
-        sourceFolder += folder.replace('/partials', '');
-      } else {
-        sourceFolder += folder.replace('/pages', '');
-      }
+      const str = folder.indexOf('partials') >= 0 ? 'partials' : 'pages';
+      const index = folder.indexOf(str);
+      const subfolder = folder.substring(0, index);
+      const sourceFolder = 'app/content' + '/' + subfolder;
+
       console.log('Compiling all pages...');
+      console.log('sourceFolder: ', sourceFolder);
       config.pages.forEach(page => {
-        if (page.source === sourceFolder) {
+        if (page.source + '/' === sourceFolder) {
           partials.registerPartials(page.source + '/partials');
           utils.traverseDir(page.source + '/pages', function(path) {
             compileFile(path, page.source, page.target);
