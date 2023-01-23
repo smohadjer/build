@@ -17,6 +17,7 @@ copyFile('app/favicon-32x32.png', 'dist/favicon-32x32.png');
 copyFile('app/android-chrome-192x192.png', 'dist/android-chrome-192x192.png');
 copyFile('app/android-chrome-512x512.png', 'dist/android-chrome-512x512.png');
 copyFile('app/site.webmanifest', 'dist/site.webmanifest');
+copyFile('app/sitemap.xml', 'dist/sitemap.xml');
 
 copyFolder('public/assets', 'dist/assets');
 copyFolder('public/resources/img', 'dist/resources/img');
