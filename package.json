@@ -1,6 +1,6 @@
 {
   "name": "build",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "A frontend build for HTML Websites",
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
 		"concat": "^1.0.3",
 		"fs-extra": "^8.1.0",
 		"handlebars": "^4.7.7",
-		"rimraf": "latest",
 		"rollup": "^2.48.0",
 		"sass": "^1.43.4"
 	}

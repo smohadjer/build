@@ -1,4 +1,11 @@
-var rimraf = require('rimraf');
+const fs = require('fs');
+const removeDirectory = (dir) => {
+  console.log(fs.existsSync(dir));
+  if (fs.existsSync(dir)){
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+};
 
-rimraf.sync('dist');
-rimraf.sync('public');
+removeDirectory('dist');
+removeDirectory('public');
+
