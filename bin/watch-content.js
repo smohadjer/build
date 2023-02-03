@@ -48,8 +48,11 @@ watcher
         str = 'pages';
         index = folder.indexOf(str);
         subfolder = folder.substring(0, index);
+      } else if (folder === '.') {
+        // layout file in content root has been changed
+        subfolder = '';
       } else {
-        // layout file has been changed
+        // layout file in a subfolder has been changed
         subfolder = folder + '/';
       }
 
