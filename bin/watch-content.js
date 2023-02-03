@@ -32,18 +32,32 @@ watcher
 	  log(`File ${filepath} has been changed`);
     const folder = path.dirname(filepath);
     console.log('folder: ', folder);
+    let str = '';
+    let index, subfolder;
+
     if (filepath.indexOf('assets') >= 0) {
       console.log('Copying asset to public folder...');
       copyFile(filepath);
+
     } else {
-      const str = folder.indexOf('partials') >= 0 ? 'partials' : 'pages';
-      const index = folder.indexOf(str);
-      const subfolder = folder.substring(0, index);
+      if (folder.indexOf('partials') >= 0 ) {
+        str = 'partials';
+        index = folder.indexOf(str);
+        subfolder = folder.substring(0, index);
+      } else if (folder.indexOf('pages') >= 0 ) {
+        str = 'pages';
+        index = folder.indexOf(str);
+        subfolder = folder.substring(0, index);
+      } else {
+        // layout file has been changed
+        subfolder = folder + '/';
+      }
+
       const sourceFolder = 'app/content' + '/' + subfolder;
 
       console.log('Compiling all pages...');
-      console.log('sourceFolder: ', sourceFolder);
       config.pages.forEach(page => {
+        console.log('sourceFolder: ', sourceFolder);
         if (page.source + '/' === sourceFolder) {
           partials.registerPartials(page.source + '/partials');
           utils.traverseDir(page.source + '/pages', function(path) {
@@ -60,7 +74,7 @@ watcher
 
 /* copies assets from content folder to public folder */
 function copyFile(filepath) {
-  console.log(filepath);
+  console.log('path: ', filepath);
   const source = 'app/content/' + filepath;
   const destination = 'public/' + filepath;
 
