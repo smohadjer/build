@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const args = process.argv.slice(2);
+const folder = args[0];
+const PORT = args[1] || 3000;
 
-app.use(express.static('public'));
+app.use(express.static(folder));
 
 /*
 app.get('/', (req, res) => {
@@ -10,4 +12,4 @@ app.get('/', (req, res) => {
 });
 */
 
-app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on port: ${PORT} and root folder: "${folder}"`));
