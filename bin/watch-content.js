@@ -1,4 +1,5 @@
 const compileFile = require('./compile.js');
+var fs = require('fs');
 const fse = require("fs-extra");
 const chokidar = require('chokidar');
 const partials = require('./partials.js');
@@ -11,12 +12,13 @@ const watcher = chokidar.watch('.', {
 	ignored: /(^|[\/\\])\../, // ignore dotfiles
 	persistent: true,
   ignoreInitial: true,
-	cwd: 'app/content'
+	cwd: 'app'
 });
 
 /* copies assets from content folder to public folder */
 const copyFile = (filepath) => {
-  const source = 'app/content/' + filepath;
+  console.log('filepath:', filepath);
+  const source = 'app/' + filepath;
   const destination = 'public/' + filepath;
 
   fse.copy(source, destination, function (err) {
@@ -32,6 +34,8 @@ const compileHbs = (filepath) => {
   const folder = path.dirname(filepath);
   let str = '';
   let index, subfolder;
+
+  console.log('folder: ', folder);
 
   if (folder.indexOf('partials') >= 0 ) {
     str = 'partials';
@@ -49,7 +53,8 @@ const compileHbs = (filepath) => {
     subfolder = folder + '/';
   }
 
-  const sourceFolder = 'app/content' + '/' + subfolder;
+  const sourceFolder = 'app/' + subfolder;
+  console.log('sourceFolder: ', sourceFolder);
 
   console.log('Compiling all pages...');
   config.pages.forEach(page => {
@@ -89,5 +94,6 @@ watcher
   })
   .on('unlink', filepath => {
 	  log(`File ${filepath} has been removed`);
-	  //fse.unlink('public' + filepath);
+    const path = 'public/' + filepath;
+    fs.unlinkSync(path);
   });
