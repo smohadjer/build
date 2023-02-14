@@ -17,7 +17,6 @@ const watcher = chokidar.watch('.', {
 
 /* copies assets from content folder to public folder */
 const copyFile = (filepath) => {
-  console.log('filepath:', filepath);
   const source = 'app/' + filepath;
   const destination = 'public/' + filepath;
 
@@ -68,32 +67,29 @@ const compileHbs = (filepath) => {
   });
 }
 
-// Something to use when events are received.
-const log = console.log.bind(console);
-// Add event listeners.
 watcher
   .on('add', filepath => {
-	  log(`File ${filepath} has been added`);
-    if (filepath.indexOf('assets') >= 0) {
-      console.log('Copying asset to public folder...');
+	  console.log(`File ${filepath} has been added`);
+    if (filepath.indexOf('assets') >= 0 ||
+        filepath.indexOf('resources/js') ||
+        filepath.indexOf('resources/img')) {
       copyFile(filepath);
-    } else {
-      console.log('Compiling page...');
+    } else if (filepath.indexOf('content') >= 0) {
       compileHbs(filepath);
     }
   })
   .on('change', filepath => {
-	  log(`File ${filepath} has been changed`);
-
-    if (filepath.indexOf('assets') >= 0) {
-      console.log('Copying asset to public folder...');
+	  console.log(`File ${filepath} has been changed`);
+    if (filepath.indexOf('assets') >= 0 ||
+        filepath.indexOf('resources/js') ||
+        filepath.indexOf('resources/img')) {
       copyFile(filepath);
-    } else {
+    } else if (filepath.indexOf('content') >= 0) {
       compileHbs(filepath);
     }
   })
   .on('unlink', filepath => {
-	  log(`File ${filepath} has been removed`);
+	  console.log(`File ${filepath} has been removed`);
     const path = 'public/' + filepath;
     fs.unlinkSync(path);
   });

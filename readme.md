@@ -8,7 +8,7 @@ You can use this build to run and deploy static Websites. To use it add the foll
 		"copyDist": "node node_modules/build/bin/copydist.js",
 		"sass": "node node_modules/build/bin/sassTocss",
 		"hbs": "node node_modules/build/bin/hbs.js",
-		"watch": "node node_modules/build/bin/watch-content.js & node node_modules/build/bin/watch-css.js & node node_modules/build/bin/watch-js.js & node node_modules/build/bin/watch-img.js",
+		"watch": "node node_modules/build/bin/watch.js & node node_modules/build/bin/watch-css.js",
 		"server": "node node_modules/build/bin/server.js",
 		"serve": "npm run compile && npm run copy && npm run sass && npm run hbs",
 		"start": "npm run serve && npm run watch & npm run server -- public",
