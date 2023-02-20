@@ -1,6 +1,6 @@
 {
   "name": "build",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "A frontend build for HTML Websites",
   "repository": {
     "type": "git",
@@ -16,12 +16,14 @@
 		"@babel/core": "^7.14.2",
 		"@babel/preset-env": "^7.15.8",
 		"@rollup/plugin-babel": "^5.3.0",
+    "@types/node": "^18.13.0",
 		"chokidar": "3.5.1",
 		"concat": "^1.0.3",
 		"fs-extra": "^8.1.0",
 		"handlebars": "^4.7.7",
 		"rollup": "^2.48.0",
 		"sass": "^1.43.4",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "express": "^4.16.2"
 	}
 }
