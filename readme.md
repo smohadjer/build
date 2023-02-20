@@ -16,8 +16,6 @@ You can use this build to run and deploy static Websites. To use it add the foll
 		"start-prod": "npm run build && npm run server -- dist 3001"
 	},
 	"devDependencies": {
-		"build": "git://github.com/smohadjer/build.git#0.1.15",
-		"handlebars": "^4.7.7",
-		"express": "^4.16.2"
+		"build": "git://github.com/smohadjer/build.git#0.1.15"
 	}
 ````
