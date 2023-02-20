@@ -1,22 +1,12 @@
-You can use this build to run and deploy static Websites. To use it add the following section to your package.json of your project:
+You can use this build to build static (HTML only) Websites that you can host for example on GitHub Pages. The build does the followings:
 
-````
-	"scripts": {
-		"precompile": "node node_modules/build/bin/clean.js",
-		"compile": "node node_modules/build/bin/compile.js",
-		"copy": "node node_modules/build/bin/copyPublic.js",
-		"copyDist": "node node_modules/build/bin/copydist.js",
-		"sass": "node node_modules/build/bin/sassTocss",
-		"hbs": "node node_modules/build/bin/hbs.js",
-		"tsc": "tsc -p .",
-		"watch": "node node_modules/build/bin/watch.js & node node_modules/build/bin/watch-css.js",
-		"server": "node node_modules/build/bin/server.js",
-		"serve": "npm run compile && npm run copy && npm run tsc && npm run sass && npm run hbs",
-		"start": "npm run serve && npm run watch & tsc -w & npm run server -- public",
-		"build": "npm run serve && rollup -c && npm run copyDist",
-		"start-prod": "npm run build && npm run server -- dist 3001"
-	},
-	"devDependencies": {
-		"build": "git://github.com/smohadjer/build.git#semver:^0.1.10"
-	},
-````
+- Allows including HTML snippets in your pages using Handlebars
+- Allows using TypeScript in your project
+- Bundles all your script modules into one single script via Rollup
+- Allows using Sass files
+- Runs an express server so you can see development and production version on your localhost
+- Watches files for changes
+- Allows using Handlebars partials/templates
+
+Example of a Website that uses this build: 
+https://github.com/smohadjer/boilerplate
