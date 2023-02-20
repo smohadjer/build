@@ -1,6 +1,6 @@
 {
   "name": "build",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "A frontend build for HTML Websites",
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
 		"fs-extra": "^8.1.0",
 		"handlebars": "^4.7.7",
 		"rollup": "^2.48.0",
-		"sass": "^1.43.4"
+		"sass": "^1.43.4",
+    "typescript": "^4.9.5"
 	}
 }
