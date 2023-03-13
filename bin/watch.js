@@ -1,11 +1,12 @@
 const compileFile = require('./compile.js');
-var fs = require('fs');
+const fs = require('fs');
 const fse = require("fs-extra");
 const chokidar = require('chokidar');
 const partials = require('./partials.js');
 const utils = require('./utils.js');
 const path = require('path');
 const config = require('./config.js');
+const sass = require('sass');
 
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
@@ -15,18 +16,40 @@ const watcher = chokidar.watch('.', {
 	cwd: 'app'
 });
 
-/* copies assets from content folder to public folder */
-const copyFile = (filepath) => {
-  const source = 'app/' + filepath;
-  const destination = 'public/' + filepath;
-
-  fse.copy(source, destination, function (err) {
-    if (err){
-      console.log('An error occured while copying the folder.')
-      return console.error(err)
+const watchCSS = () => {
+  sass.render({
+    file: './app/resources/css/styles.scss',
+    includePaths: ['./app/resources/css/modules/']
+  }, function(err, result) {
+    if(!err) {
+        // No errors during the compilation, write this result on the disk
+        fs.writeFile('public/resources/css/styles.css', result.css, function(err){
+          if(!err){
+            //file written on disk
+          }
+        });
+    } else {
+      console.log(err);
     }
-    console.log(source, ' copy completed!')
   });
+};
+
+/* copies assets and resources to public folder */
+const copyFile = (filepath) => {
+  if (filepath.indexOf('resources/css') >= 0) {
+    watchCSS();
+  } else {
+    const source = 'app/' + filepath;
+    const destination = 'public/' + filepath;
+
+    fse.copy(source, destination, function (err) {
+      if (err){
+        console.log('An error occured while copying the folder.')
+        return console.error(err)
+      }
+      console.log(source, ' copy completed!')
+    });
+  }
 };
 
 const compileHbs = (filepath) => {
@@ -57,7 +80,6 @@ const compileHbs = (filepath) => {
 
   console.log('Compiling all pages...');
   config.pages.forEach(page => {
-    console.log('sourceFolder: ', sourceFolder);
     if (page.source + '/' === sourceFolder) {
       partials.registerPartials(page.source + '/partials');
       utils.traverseDir(page.source + '/pages', function(path) {
@@ -70,23 +92,11 @@ const compileHbs = (filepath) => {
 watcher
   .on('add', filepath => {
 	  console.log(`File ${filepath} has been added`);
-    if (filepath.indexOf('assets') >= 0 ||
-        filepath.indexOf('resources/js') ||
-        filepath.indexOf('resources/img')) {
-      copyFile(filepath);
-    } else if (filepath.indexOf('content') >= 0) {
-      compileHbs(filepath);
-    }
+    filepath.indexOf('content') >= 0 ? compileHbs(filepath) : copyFile(filepath);
   })
   .on('change', filepath => {
 	  console.log(`File ${filepath} has been changed`);
-    if (filepath.indexOf('assets') >= 0 ||
-        filepath.indexOf('resources/js') ||
-        filepath.indexOf('resources/img')) {
-      copyFile(filepath);
-    } else if (filepath.indexOf('content') >= 0) {
-      compileHbs(filepath);
-    }
+    filepath.indexOf('content') >= 0 ? compileHbs(filepath) : copyFile(filepath);
   })
   .on('unlink', filepath => {
 	  console.log(`File ${filepath} has been removed`);
