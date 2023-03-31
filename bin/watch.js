@@ -8,6 +8,22 @@ const path = require('path');
 const config = require('./config.js');
 const sass = require('sass');
 
+/* watching js files for bundling */
+// https://rollupjs.org/javascript-api/
+const rollup = require('rollup');
+const inputOptions = {
+  input: 'public/resources/js/main.js'
+};
+const outputOptions = {
+  file: 'public/resources/js/bundle.js',
+  format: 'iife'
+};
+const watchOptions = {
+  ...inputOptions,
+  output: [outputOptions]
+};
+rollup.watch(watchOptions);
+
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
 	ignored: /(^|[\/\\])\../, // ignore dotfiles
@@ -42,13 +58,12 @@ const copyFile = (filepath) => {
     const source = 'app/' + filepath;
     const destination = 'public/' + filepath;
 
-    fse.copy(source, destination, function (err) {
-      if (err){
-        console.log('An error occured while copying the folder.')
-        return console.error(err)
-      }
+    try {
+      fse.copySync(source, destination);
       console.log(source, ' copy completed!')
-    });
+    } catch (err) {
+      console.error(err)
+    }
   }
 };
 

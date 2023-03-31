@@ -6,6 +6,5 @@ const removeDirectory = (dir) => {
   }
 };
 
-removeDirectory('dist');
 removeDirectory('public');
 
