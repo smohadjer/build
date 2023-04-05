@@ -7,6 +7,7 @@ const utils = require('./utils.js');
 const path = require('path');
 const config = require('./config.js');
 const sass = require('sass');
+const precompileHbsTemplates = require('./hbs.js');
 
 /* watching js files for bundling */
 // https://rollupjs.org/javascript-api/
@@ -45,7 +46,7 @@ const watchCSS = () => {
           }
         });
     } else {
-      console.log(err);
+      console.error(err);
     }
   });
 };
@@ -54,13 +55,14 @@ const watchCSS = () => {
 const copyFile = (filepath) => {
   if (filepath.indexOf('resources/css') >= 0) {
     watchCSS();
+  } else if (filepath.indexOf('resources/hbs') >= 0) {
+    precompileHbsTemplates();
   } else {
     const source = 'app/' + filepath;
     const destination = 'public/' + filepath;
 
     try {
       fse.copySync(source, destination);
-      console.log(source, ' copy completed!')
     } catch (err) {
       console.error(err)
     }
@@ -71,8 +73,6 @@ const compileHbs = (filepath) => {
   const folder = path.dirname(filepath);
   let str = '';
   let index, subfolder;
-
-  console.log('folder: ', folder);
 
   if (folder.indexOf('partials') >= 0 ) {
     str = 'partials';
@@ -91,9 +91,7 @@ const compileHbs = (filepath) => {
   }
 
   const sourceFolder = 'app/' + subfolder;
-  console.log('sourceFolder: ', sourceFolder);
 
-  console.log('Compiling all pages...');
   config.pages.forEach(page => {
     if (page.source + '/' === sourceFolder) {
       partials.registerPartials(page.source + '/partials');
