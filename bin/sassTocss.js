@@ -26,13 +26,21 @@ const convertToCSS = (fullPath, targetPath) => {
   });
 };
 
-fs.readdirSync(dir).forEach(file => {
-  const fullPath = path.join(dir, file);
-  const targetPath = fullPath.replace('app/', 'public/');
-  const targetCSS = targetPath.replace('.scss', '.css');
+const readCSSDir = () => {
+  fs.readdirSync(dir).forEach(file => {
+    const fullPath = path.join(dir, file);
+    const targetPath = fullPath.replace('app/', 'public/');
+    const targetCSS = targetPath.replace('.scss', '.css');
 
-  // to exclude modules folder
-  if (!fs.lstatSync(fullPath).isDirectory()) {
-    convertToCSS(fullPath, targetCSS);
-  }
-});
+    // to exclude modules folder
+    if (!fs.lstatSync(fullPath).isDirectory()) {
+      convertToCSS(fullPath, targetCSS);
+    }
+  });
+}
+
+readCSSDir();
+
+module.exports = { readCSSDir }
+
+

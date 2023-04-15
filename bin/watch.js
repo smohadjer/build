@@ -6,7 +6,7 @@ const partials = require('./partials.js');
 const utils = require('./utils.js');
 const path = require('path');
 const config = require('./config.js');
-const sass = require('sass');
+const sass = require('./sassToCss.js');
 const precompileHbsTemplates = require('./hbs.js');
 
 /* watching js files for bundling */
@@ -33,28 +33,10 @@ const watcher = chokidar.watch('.', {
 	cwd: 'app'
 });
 
-const watchCSS = () => {
-  sass.render({
-    file: './app/resources/css/styles.scss',
-    includePaths: ['./app/resources/css/modules/']
-  }, function(err, result) {
-    if(!err) {
-        // No errors during the compilation, write this result on the disk
-        fs.writeFile('public/resources/css/styles.css', result.css, function(err){
-          if(!err){
-            //file written on disk
-          }
-        });
-    } else {
-      console.error(err);
-    }
-  });
-};
-
 /* copies assets and resources to public folder */
 const copyFile = (filepath) => {
   if (filepath.indexOf('resources/css') >= 0) {
-    watchCSS();
+    sass.readCSSDir();
   } else if (filepath.indexOf('resources/hbs') >= 0) {
     precompileHbsTemplates();
   } else {
