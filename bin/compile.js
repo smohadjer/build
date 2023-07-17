@@ -12,15 +12,33 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const filename = path.basename(pathToPage, extension);
   const folder = path.dirname(pathToPage);
   const source = fs.readFileSync(pathToLayout, 'utf8');
+
   handlebars.registerPartial(
     'content',
     fs.readFileSync(pathToPage, 'utf8')
   )
+
+  const getPageTitle = (page_id) => {
+    const pathToTitles = sourceFolder + '/pageTitle.json';
+    try {
+      const titles = fs.readFileSync(pathToTitles, 'utf8');
+      const titlesJson = JSON.parse(titles);
+      const page_title = titlesJson[page_id] || titlesJson.index;
+      return page_title;
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
+  }
+
   const template = handlebars.compile(source);
   /* using substring(1) to remove slash from id */
   const subFolder = folder.replace(sourceFolder + '/pages', '');
   const page_id = (subFolder + '/' + filename).substring(1);
-  const html = template({pageId: page_id});
+  const html = template({
+    pageId: page_id,
+    pageTitle: getPageTitle(page_id)
+  });
   const pageFolder = targetFolder + subFolder;
 
   if (!fs.existsSync(pageFolder)){
