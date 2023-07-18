@@ -18,13 +18,13 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
     fs.readFileSync(pathToPage, 'utf8')
   )
 
-  const getPageTitle = (page_id) => {
-    const pathToTitles = sourceFolder + '/pageTitle.json';
+  const getMeta = (metaFile, page_id) => {
+    const metaPath = path.join(sourceFolder, metaFile);
     try {
-      const titles = fs.readFileSync(pathToTitles, 'utf8');
-      const titlesJson = JSON.parse(titles);
-      const page_title = titlesJson[page_id] || titlesJson.index;
-      return page_title;
+      const fileContent = fs.readFileSync(metaPath, 'utf8');
+      const json = JSON.parse(fileContent);
+      const meta = json[page_id] || json.index;
+      return meta;
     } catch (error) {
       console.log(error);
       return '';
@@ -37,7 +37,8 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const page_id = (subFolder + '/' + filename).substring(1);
   const html = template({
     pageId: page_id,
-    pageTitle: getPageTitle(page_id)
+    pageTitle: getMeta('pageTitle.json', page_id),
+    pageDescription: getMeta('pageDescription.json', page_id)
   });
   const pageFolder = targetFolder + subFolder;
 
