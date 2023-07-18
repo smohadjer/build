@@ -2,6 +2,7 @@ const config = require('./config.js');
 const fse = require("fs-extra");
 const path = require('path');
 const utils = require('./utils.js');
+const fs = require('fs');
 
 function copyDependencies(type) {
   if (config.dependencies[type]) {
@@ -84,18 +85,25 @@ function copyFolder(source, destination) {
 	}
 }
 
+function copyRootFiles(source, target) {
+  fs.readdir(source, function (err, files) {
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+
+    files.forEach(function (file) {
+        if (file !== '.DS_Store' && fs.lstatSync(path.join(source,file)).isFile()) {
+          copyFile(path.join(source,file),path.join(target,file));
+        }
+    });
+  });
+}
+
 copyDependencies('css');
 copyDependencies('js');
 copyResources('js');
 
-copyFile('app/apple-touch-icon.png', 'public/apple-touch-icon.png');
-copyFile('app/favicon.ico', 'public/favicon.ico');
-copyFile('app/favicon-16x16.png', 'public/favicon-16x16.png');
-copyFile('app/favicon-32x32.png', 'public/favicon-32x32.png');
-copyFile('app/android-chrome-192x192.png', 'public/android-chrome-192x192.png');
-copyFile('app/android-chrome-512x512.png', 'public/android-chrome-512x512.png');
-copyFile('app/site.webmanifest', 'public/site.webmanifest');
-copyFile('app/sitemap.xml', 'public/sitemap.xml');
+copyRootFiles('app', 'public');
 
 copyFolder('app/assets', 'public/assets');
 copyFolder('app/resources/img', 'public/resources/img');
