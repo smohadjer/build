@@ -14,7 +14,8 @@ if (args[0] === 'js') {
   if (args[1] === 'watch') {
     await ctx.watch();
   } else {
-    ctx.rebuild();
+    await ctx.rebuild();
+    ctx.dispose();
   }
 }
 
