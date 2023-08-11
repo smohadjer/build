@@ -1,8 +1,8 @@
-const config = require('./config.js');
-const fse = require("fs-extra");
-const path = require('path');
-const utils = require('./utils.js');
-const fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
+import {traverseDir} from './utils.js';
+import config from './config.js';
+import * as fse from 'fs-extra/esm';
 
 function copyDependencies(type) {
   if (config.dependencies[type]) {
@@ -26,7 +26,7 @@ function copyResources(folder) {
 
   if (folder === 'js') {
     //compile typescript files
-    utils.traverseDir(srcDir, (filePath) => {
+    traverseDir(srcDir, (filePath) => {
       console.log('js: ', filePath);
       const extension = path.extname(filePath);
       console.log(extension);
@@ -74,7 +74,7 @@ function copyFile(source, destination) {
 }
 
 function copyFolder(source, destination) {
-	if (fse.existsSync(source)) {
+	if (fs.existsSync(source)) {
 		fse.copy(source, destination, function (err) {
 			if (err){
 				console.log('An error occured while copying the folder.')

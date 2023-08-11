@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const config = require('./config.js');
-const handlebars = require('handlebars');
-const partials = require('./partials.js');
-const utils = require('./utils.js');
+import * as fs from 'fs';
+import * as path from 'path';
+import config from './config.js';
+import Handlebars from "handlebars";
+import partials from './partials.js';
+import {traverseDir, registerHandlebarsHelpers} from './utils.js';
 
 const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const pathToLayout = sourceFolder + '/layout.hbs';
@@ -13,7 +13,7 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const folder = path.dirname(pathToPage);
   const source = fs.readFileSync(pathToLayout, 'utf8');
 
-  handlebars.registerPartial(
+  Handlebars.registerPartial(
     'content',
     fs.readFileSync(pathToPage, 'utf8')
   )
@@ -31,7 +31,7 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
     }
   }
 
-  const template = handlebars.compile(source);
+  const template = Handlebars.compile(source);
   /* using substring(1) to remove slash from id */
   const subFolder = folder.replace(sourceFolder + '/pages', '');
   const page_id = (subFolder + '/' + filename).substring(1);
@@ -55,13 +55,13 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   });
 };
 
-utils.registerHandlebarsHelpers();
+registerHandlebarsHelpers();
 
 config.pages.forEach(page => {
   partials.registerPartials(page.source + '/partials');
-  utils.traverseDir(page.source + '/pages', function(path) {
+  traverseDir(page.source + '/pages', function(path) {
     compileFile(path, page.source, page.target);
   });
 });
 
-module.exports = compileFile;
+export default compileFile;

@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const handlebars = require('handlebars');
-const utils = require('./utils.js');
+import * as fs from 'fs';
+import * as path from 'path';
+import handlebars from 'handlebars';
+import { traverseDir } from './utils.js';
 
-module.exports = {
+export default {
   registerPartials: (pathToPartial) => {
     const callback = (fullPath) => {
       const extension = path.extname(fullPath);
@@ -12,6 +12,6 @@ module.exports = {
       handlebars.registerPartial(partialName, fs.readFileSync(fullPath, 'utf8'));
     };
 
-    utils.traverseDir(pathToPartial, callback);
+    traverseDir(pathToPartial, callback);
   }
 }

@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const sass = require('sass');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as sass from 'sass';
+
 const dir = 'app/resources/css';
 const targetDir = dir.replace('app/', 'public/');
 const convertToCSS = (fullPath, targetPath) => {
@@ -41,6 +42,6 @@ const readCSSDir = () => {
 
 readCSSDir();
 
-module.exports = { readCSSDir }
+export default { readCSSDir }
 
 

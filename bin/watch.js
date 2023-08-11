@@ -1,29 +1,13 @@
-const compileFile = require('./compile.js');
-const fs = require('fs');
-const fse = require("fs-extra");
-const chokidar = require('chokidar');
-const partials = require('./partials.js');
-const utils = require('./utils.js');
-const path = require('path');
-const config = require('./config.js');
-const sass = require('./sassToCss.js');
-const precompileHbsTemplates = require('./hbs.js');
-
-/* watching js files for bundling */
-// https://rollupjs.org/javascript-api/
-const rollup = require('rollup');
-const inputOptions = {
-  input: 'public/resources/js/main.js'
-};
-const outputOptions = {
-  file: 'public/resources/js/bundle.js',
-  format: 'iife'
-};
-const watchOptions = {
-  ...inputOptions,
-  output: [outputOptions]
-};
-rollup.watch(watchOptions);
+import compileFile from './compile.js';
+import * as fs from 'fs';
+import * as fse from 'fs-extra/esm';
+import chokidar from 'chokidar';
+import partials from './partials.js';
+import {traverseDir} from './utils.js';
+import * as path from 'path';
+import config from './config.js';
+import precompileHbsTemplates from './hbs.js';
+import sass from './sassToCss.js';
 
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
@@ -33,9 +17,12 @@ const watcher = chokidar.watch('.', {
 	cwd: 'app'
 });
 
+console.log('Watching app folder...');
+
 /* copies assets and resources to public folder */
 const copyFile = (filepath) => {
   if (filepath.indexOf('resources/css') >= 0) {
+    console.log('css changed....');
     sass.readCSSDir();
   } else if (filepath.indexOf('resources/hbs') >= 0) {
     precompileHbsTemplates();
@@ -77,7 +64,7 @@ const compileHbs = (filepath) => {
   config.pages.forEach(page => {
     if (page.source + '/' === sourceFolder) {
       partials.registerPartials(page.source + '/partials');
-      utils.traverseDir(page.source + '/pages', function(path) {
+      traverseDir(page.source + '/pages', function(path) {
         compileFile(path, page.source, page.target);
       });
     }

@@ -1,5 +1,7 @@
-const fs = require('fs');
-const exec = require('child_process').exec;
+import * as fs from 'fs';
+import child_process from 'child_process';
+
+const exec = child_process.exec;
 
 const precompileHbsTemplates = () => {
     const shell_command = 'handlebars --extension hbs --namespace myApp.templates app/resources/hbs -f public/resources/js/lib/handlebars.templates.js';
@@ -15,4 +17,4 @@ const precompileHbsTemplates = () => {
 
 precompileHbsTemplates();
 
-module.exports = precompileHbsTemplates;
+export default precompileHbsTemplates;

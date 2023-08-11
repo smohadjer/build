@@ -1,4 +1,5 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
 const args = process.argv.slice(2);
 const folder = args[0];
