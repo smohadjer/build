@@ -1,4 +1,4 @@
-## Frontend buid for HTML websites
+## Frontend build for HTML websites
 
 ### Features
 - Allows including HTML snippets in your pages using Handlebars
