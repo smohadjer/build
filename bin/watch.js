@@ -7,7 +7,6 @@ import {traverseDir} from './utils.js';
 import * as path from 'path';
 import config from './config.js';
 import precompileHbsTemplates from './hbs.js';
-import sass from './sassToCss.js';
 
 // using cwd option so instead of path we get filename
 const watcher = chokidar.watch('.', {
@@ -22,8 +21,7 @@ console.log('Watching app folder...');
 /* copies assets and resources to public folder */
 const copyFile = (filepath) => {
   if (filepath.indexOf('resources/css') >= 0) {
-    console.log('css changed....');
-    sass.readCSSDir();
+    console.log('Doing nothing as esbuild watches css files...');
   } else if (filepath.indexOf('resources/hbs') >= 0) {
     precompileHbsTemplates();
   } else {

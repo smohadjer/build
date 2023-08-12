@@ -106,5 +106,7 @@ copyResources('js');
 copyRootFiles('app', 'public');
 
 copyFolder('app/assets', 'public/assets');
-copyFolder('app/resources/img', 'public/resources/img');
-copyFolder('app/resources/fonts', 'public/resources/fonts');
+
+// resource images are inserted into css as data urls by esbuild and fonts are copied by esbuild
+//copyFolder('app/resources/img', 'public/resources/img');
+//copyFolder('app/resources/fonts', 'public/resources/fonts');
