@@ -5,6 +5,12 @@ const args = process.argv.slice(2);
 let ctxjs = await esbuild.context({
   entryPoints: ['app/resources/js/main.ts'],
   bundle: true,
+  target: [
+    'chrome58',
+    'edge16',
+    'firefox57',
+    'safari11',
+  ],
   outfile: 'public/resources/js/bundle.js',
 });
 
@@ -24,6 +30,12 @@ let ctxcss = await esbuild.context({
     '.svg': 'dataurl',
     '.ttf': 'copy'
   },
+  target: [
+    'chrome58',
+    'edge16',
+    'firefox57',
+    'safari11',
+  ],
   outfile: 'public/resources/css/styles.css',
 });
 
