@@ -5,7 +5,7 @@ const args = process.argv.slice(2);
 const folder = args[0];
 const PORT = args[1] || 3000;
 
-app.use(express.static(folder));
+app.use(express.static(folder, { extensions: ['html'] }));
 
 /*
 app.get('/', (req, res) => {
