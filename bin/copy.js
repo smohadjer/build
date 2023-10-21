@@ -25,7 +25,6 @@ function copyResources(folder) {
 	const destDir = './public/resources/' + folder;
 
   if (folder === 'js') {
-    //compile typescript files
     traverseDir(srcDir, (filePath) => {
       console.log('js: ', filePath);
       const extension = path.extname(filePath);
@@ -38,6 +37,22 @@ function copyResources(folder) {
           if (err){
             console.log('An error occured while copying the folder.')
             return console.error(err)
+          }
+          console.log(targetPath, ' copy completed!')
+        });
+      }
+    });
+  } else if (folder === 'css') {
+    traverseDir(srcDir, (filePath) => {
+      // css files inside modules get bundled into styles.css, so no need to copy them
+      if (filePath.indexOf('/modules') === -1 &&
+          filePath.indexOf('styles.css') === -1 &&
+          filePath.indexOf('.DS_Store') === -1) {
+        console.log('css: ', filePath);
+        const targetPath = filePath.replace('app/', 'public/');
+        fse.copy(filePath, targetPath, function (err) {
+          if (err){
+            return console.error(`Error while copying folder ${folder}`, err)
           }
           console.log(targetPath, ' copy completed!')
         });
@@ -102,6 +117,7 @@ function copyRootFiles(source, target) {
 copyDependencies('css');
 copyDependencies('js');
 copyResources('js');
+copyResources('css');
 
 copyRootFiles('app', 'public');
 

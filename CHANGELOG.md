@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.5
+
+* Updated copy.js to allow copying .css files in 'resources/css' folder to public folder, except files in modules folder which get bundled into styles.css.
+
 ## 2.0.3
 
 * Adds target property to esbuild to allow use of nesting in css files
