@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.6
+
+* Updates bundle.js to watch css and js files in root of css and js folder for files that don't get bundled as they are only used in specific pages.
+
 ## 2.0.5
 
 * Updated copy.js to allow copying .css files in 'resources/css' folder to public folder, except files in modules folder which get bundled into styles.css.

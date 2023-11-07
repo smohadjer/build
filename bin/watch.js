@@ -20,14 +20,17 @@ console.log('Watching app folder...');
 
 /* copies assets and resources to public folder */
 const copyFile = (filepath) => {
-  if (filepath.indexOf('resources/css') >= 0) {
-    console.log('Doing nothing as esbuild watches css files...');
-  } else if (filepath.indexOf('resources/hbs') >= 0) {
+  if (filepath.indexOf('resources/css') >= 0 ||
+  filepath.indexOf('resources/js') >= 0) {
+    // do nothing as esbuild watches css and js files...
+    return;
+  }
+
+  if (filepath.indexOf('resources/hbs') >= 0) {
     precompileHbsTemplates();
   } else {
     const source = 'app/' + filepath;
     const destination = 'public/' + filepath;
-
     try {
       fse.copySync(source, destination);
     } catch (err) {
