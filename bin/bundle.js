@@ -38,7 +38,8 @@ let ctxcss = await esbuild.context({
   bundle: true,
   loader: {
     '.svg': 'dataurl',
-    '.ttf': 'copy'
+    '.ttf': 'copy',
+    '.otf': 'copy
   },
   target: [
     'chrome58',
