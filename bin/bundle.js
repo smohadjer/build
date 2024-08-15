@@ -3,8 +3,10 @@ import * as fs from 'fs';
 
 const args = process.argv.slice(2);
 
+const entryPoints = fs.readdirSync('app/resources/js').filter(name => name !== '.DS_Store' && name !== 'modules').map(item => 'app/resources/js/' + item);
+console.log('entryPoints', entryPoints);
 let ctxjs = await esbuild.context({
-  entryPoints: ['app/resources/js/main.ts'],
+  entryPoints: entryPoints,
   bundle: true,
   target: [
     'chrome58',
@@ -12,24 +14,15 @@ let ctxjs = await esbuild.context({
     'firefox57',
     'safari11',
   ],
-  outfile: 'public/resources/js/bundle.js',
-});
-
-const jsRootFiles = fs.readdirSync('app/resources/js').filter(name => name !== '.DS_Store' && name !== 'modules' && name !== 'main.ts').map(item => 'app/resources/js/' + item);
-const ctxJSRootFiles = await esbuild.context({
-  entryPoints: jsRootFiles,
   outdir: 'public/resources/js',
 });
 
 if (args[0] === 'watch') {
   await ctxjs.watch();
-  await ctxJSRootFiles.watch();
   console.log('watching js...');
 } else {
   await ctxjs.rebuild();
-  await ctxJSRootFiles.rebuild();
   ctxjs.dispose();
-  ctxJSRootFiles.dispose();
   console.log('disposed context');
 }
 
