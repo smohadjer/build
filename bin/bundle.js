@@ -17,9 +17,10 @@ let ctxjs = await esbuild.context({
   outdir: 'public/resources/js',
 });
 
-const jsApiFiles = fs.readdirSync('api/ts').filter(name => name !== '.DS_Store').map(item => 'api/ts/'+item);
+const apiEntryPoints = fs.readdirSync('api/ts').filter(name => name !== '.DS_Store').map(item => 'api/ts/'+item);
+console.log('apiEntryPoints', apiEntryPoints);
 const ctxJSRootFiles = await esbuild.context({
-  entryPoints: jsApiFiles,
+  entryPoints: apiEntryPoints,
   bundle: false,
   platform: 'node',
   outdir: 'api',
