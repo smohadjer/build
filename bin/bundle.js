@@ -17,12 +17,23 @@ let ctxjs = await esbuild.context({
   outdir: 'public/resources/js',
 });
 
+const jsApiFiles = fs.readdirSync('api/ts').filter(name => name !== '.DS_Store').map(item => 'api/ts/'+item);
+const ctxJSRootFiles = await esbuild.context({
+  entryPoints: jsApiFiles,
+  bundle: false,
+  platform: 'node',
+  outdir: 'api',
+});
+
 if (args[0] === 'watch') {
   await ctxjs.watch();
+  await ctxJSRootFiles.watch();
   console.log('watching js...');
 } else {
   await ctxjs.rebuild();
+  await ctxJSRootFiles.rebuild();
   ctxjs.dispose();
+  ctxJSRootFiles.dispose();
   console.log('disposed context');
 }
 
