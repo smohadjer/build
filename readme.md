@@ -9,5 +9,5 @@
 - Allows using Handlebars partials/templates
 
 ### Demo Website
-https://myendpoint.de/
+https://boilerplate.saeidmohadjer.com/
 
