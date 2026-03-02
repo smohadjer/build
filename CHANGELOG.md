@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.14
+* adds file loader for images when bundling css files
+
 ## 2.0.13
 * Updates dependencies
 

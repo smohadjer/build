@@ -36,7 +36,12 @@ const ctxcss = await esbuild.context({
   loader: {
     '.svg': 'dataurl',
     '.ttf': 'copy',
-    '.otf': 'copy'
+    '.otf': 'copy',
+    '.png': 'file',
+    '.jpg': 'file',
+    '.jpeg': 'file',
+    '.gif': 'file',
+    '.webp': 'file',
   },
   target: [
     'chrome58',
