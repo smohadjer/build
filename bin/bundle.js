@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild';
 import * as fs from 'fs';
+import { sassPlugin } from "esbuild-sass-plugin";
 
 const args = process.argv.slice(2);
 
@@ -33,7 +34,9 @@ console.log('css entryPoints', cssEntryPoints);
 const ctxcss = await esbuild.context({
   entryPoints: cssEntryPoints,
   bundle: true,
+  plugins: [sassPlugin()],
   loader: {
+    ".scss": "css",
     '.svg': 'dataurl',
     '.ttf': 'copy',
     '.otf': 'copy',
