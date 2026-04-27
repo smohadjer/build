@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.16
+* sends category to tempaltes for helping rendering subnavs
+
 ## 2.0.14
 * adds file loader for images when bundling css files
 

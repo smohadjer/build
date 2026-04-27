@@ -37,6 +37,7 @@ const compileFile = function(pathToPage, sourceFolder, targetFolder) {
   const page_id = (subFolder + '/' + filename).substring(1);
   const html = template({
     pageId: page_id,
+    category: subFolder.substring(1),
     pageTitle: getMeta('pageTitle.json', page_id),
     pageDescription: getMeta('pageDescription.json', page_id)
   });
